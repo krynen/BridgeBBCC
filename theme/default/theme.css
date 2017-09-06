@@ -1,0 +1,167 @@
+﻿/* 폰트 로드 */
+@import url(https://fonts.googleapis.com/earlyaccess/jejugothic.css);
+@import url(https://fonts.googleapis.com/earlyaccess/notosanskr.css);
+@import url(https://fonts.googleapis.com/earlyaccess/cwtexyen.css);
+
+
+/* 위치 기본 설정 */
+html
+{
+	/* 송출 소프트웨어의 disable scrollbar 여부에 상관 없이 스크롤바를 나타나지 않게 함 */
+	overflow:hidden;
+}
+
+body
+{
+	position:absolute;
+	
+	/* html의 기본 여백 제거 */
+	margin:0; right:0; left:0;
+	/* 채팅 메세지가 아래에서부터 나타나도록 */
+	bottom:0;
+}
+
+img.twitch_emote
+{
+	/* 최대(기본) 크기는 112px */
+	max-height:50px;
+}
+
+
+/* 구독자 및 후원 메세지 설정 */
+/*
+	구독 메세지
+	<div class="chat_msg_box">
+		<div class="chat_cheer_box">(configData.cheersMsg)</div>
+		우리 스트리머 사랑해!!
+		<div calss="chat_cheer_text">
+			<img class="cheer_icon" src="./images/cheer/cheer100.gif>
+			100
+		</div>
+		사실 테스트하려고 후원하는거지만.
+	</div>
+	
+	후원 메세지
+	<div class="chat_msg_box">
+		<div class="chat_subscribe_box">(configData.subMonthsMsg)</div>
+		구독인 줄 알았지만 테스트였습니다 Kappa Kappa
+	</div>	
+*/
+@keyframes SubsAni { 50%	{ color:red; } }
+.chat_msg_box .chat_subscribe_box,
+.chat_msg_box .chat_cheer_box			{	text-align:center; 
+																		animation:SubsAni 6 1s ease; }
+/* 후원 금액 */
+.chat_cheer_text									{ color:red; display:inline-block; }
+/* 후원 아이콘 */
+.chat_cheer_text img.cheer_icon		{	max-height:1em; vertical-align: middle; }
+
+
+
+/* 배경 설정. 전체적인 배경이 필요할 때 이용 */
+/*
+	<div id="background"></div>
+	<div id="chat_wrapper">
+	...
+*/
+#background	{	position:absolute; left:0; right:0; top:0; bottom:0; }
+
+
+
+/* 폰트 설정 */
+html								{	font-family:'cwtexyen', 'Jeju Gothic', serif;
+											font-size:20px; color: white;
+											text-shadow:
+						-1px -1px 1px black, -1px   0 1px black,
+						-1px  1px 1px black,    0 1px 1px black,
+ 						 1px  1px 1px black,  1px   0 1px black,
+						 1px -1px 1px black,   0 -1px 1px black,
+    
+						 -1px -1px 3px grey, -1px   0 3px grey,
+						 -1px  1px 3px grey,    0 1px 3px grey,
+						  1px  1px 3px grey,  1px   0 3px grey,
+						  1px -1px 3px grey,   0 -1px 3px grey; }
+.chat_nickname_box	{	font-size:0.8em; }
+
+
+.chat_outer_box			{	position:relative; z-index:0; overflow:hidden;
+											margin-top:8px; border:1px solid grey; padding:4px; }
+.chat_inner_box			{	margin-bottom:3px; }
+											
+.chat_nickname_box,
+.chat_badge_box 		{	display:inline-block; }
+.chat_badge_box			{ float:right; }
+
+.chat_msg_box							{	white-space:pre-line; word-break:break-word;
+														max-height:100px; }
+.chat_msg_box.image_only	{	text-align:center; }
+
+
+
+/* 클립이 포함된 채팅 메세지에 대한 설정 */
+/* 크롬 등 보안설정된 브라우저에선 디버그가 불가능하므로 유의 */
+/*
+	<div class="chat_outer_box clip_included">
+		<div class="chat_inner_box">
+			...
+			<div class="chat_msg_box">
+				<div class="chat_clip_box">
+					<img src="https://clips-media-assets.twitch.tv/*-preview.jpg">
+					<div class="chat_clip_title">이걸 스트리머가 또</div>
+					<div class="chat_clip_by">Clipped by 맛물</div>
+				</div>
+				...
+	클립 로드에 실패했을 경우
+				<div class="chat_clip_box text_only invalid text_only">
+					Invalid Clip
+				</div>
+				...
+	클립 미리보기를 미표시설정했을 경우(configData.loadClipPreview == false)
+				<div class="chat_clip_box text_only">
+					(configData.clipReplaceMsg)
+				</div>
+				...
+*/
+.clip_included .chat_msg_box
+{
+	/* 클립과 일반 텍스트를 같이 보냈을 경우를 위해 높이를 높여준다 */
+	max-height:200px;
+}
+
+.chat_clip_box
+{
+	/* invalid clip은 이미지를 포함하지 않기 때문에 max height로 지정 */
+	/* invalid clip의 경우 .chat_clip_box에 .invalid를 포함하므로 이를 이용할 수도 있음 */
+	max-height:100px;
+	
+	/* .chat_clip_by의 absolute position을 위해 설정 */
+	position:relative;
+}	
+
+.chat_clip_box img
+{
+	/* 사실상 이 속성으로 .chat_clip_box의 높이를 조절 */
+	height:100px;
+	/* .chat_clip_box의 나머지 DOM을 오른쪽에 배치시키기 위해 float을 이용 */
+	float:left;
+}
+
+.chat_clip_title
+{
+	/* 가로세로로 모두 가운데정렬하기 위해 사용 */
+	line-height:100px;
+	text-align:center;
+}
+
+.chat_clip_by
+{
+	/* .chat_clip_box의 우하단에 배치 */
+	position:absolute; bottom:0; right:0;
+	/* config client로 조절하지 않는 글꼴크기이므로 .chat_msg_box에서 상속받아 조절 */
+	font-size:0.7em;
+}
+
+.chat_clip_box.text_only
+{
+	text-align:center;
+}

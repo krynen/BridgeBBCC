@@ -1,0 +1,20 @@
+{
+	"name": "BridgeBBCC",
+	"version": "0.2.0",
+	"description": "Bridge Between BroadCasting and twitch Chat",
+	"keywords": [ "twitch", "chat", "IRC" ],
+	"bugs": {
+		"url": "https://github.com/krynen/BridgeBBCC"
+	},
+	"license": "MIT",
+	"author": "Mr_WaterT",
+	"dependencies": {
+		"irc": "~14.4.0"
+	},
+	"engines": {
+		"node": "~8.3.0"
+	},
+	"scripts": {
+		"start": "browserify source/main.js -o lib/browserified.js"
+	}
+}
