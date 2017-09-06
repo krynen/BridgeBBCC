@@ -577,7 +577,7 @@ if (configData.loadDcCons) {
 					keywords.push(dcConsData[index].keywords[index2]);
 				}
 			}
-			keywords.sort(function(a,b) { return a.length < b.length; } );
+			keywords.sort(function(a,b) { return b.length - a.length; } );
 			
 			applyDcCon = function(message, data) {
 				for (var index in keywords) {
@@ -698,8 +698,8 @@ client = (function() {
 					var nick = args[0].split(/[!@]/g)[1];
 					var displayNick = twitchArgs["display-name"];
 					var realNick = "";
-					if (configData.useDisplayName) {
-						if (displayNick.replace(/\s/g, "")!="") { realNick = displayNick; }
+					if ( (configData.useDisplayName) && (displayNick.replace(/\s/g, "")!="") ) {
+						realNick = displayNick;
 					}
 					else { realNick = nick; }
 					
