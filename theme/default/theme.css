@@ -104,23 +104,24 @@ html								{	font-family:'cwtexyen', 'Jeju Gothic', serif;
 	<div class="chat_outer_box clip_included">
 		<div class="chat_inner_box">
 			...
-			<div class="chat_msg_box">
-				<div class="chat_clip_box">
-					<img src="https://clips-media-assets.twitch.tv/*-preview.jpg">
-					<div class="chat_clip_title">이걸 스트리머가 또</div>
-					<div class="chat_clip_by">Clipped by 맛물</div>
-				</div>
-				...
+		</div>
+		<div class="chat_msg_box">
+			<div class="chat_clip_box">
+				<img src="https://clips-media-assets.twitch.tv/*-preview.jpg">
+				<div class="chat_clip_title">이걸 스트리머가 또</div>
+				<div class="chat_clip_by">Clipped by 맛물</div>
+			</div>
+			...
 	클립 로드에 실패했을 경우
-				<div class="chat_clip_box text_only invalid text_only">
-					Invalid Clip
-				</div>
-				...
+			<div class="chat_clip_box text_only invalid text_only">
+				Invalid Clip
+			</div>
+			...
 	클립 미리보기를 미표시설정했을 경우(configData.loadClipPreview == false)
-				<div class="chat_clip_box text_only">
-					(configData.clipReplaceMsg)
-				</div>
-				...
+			<div class="chat_clip_box text_only">
+				(configData.clipReplaceMsg)
+			</div>
+			...
 */
 .clip_included .chat_msg_box
 {
