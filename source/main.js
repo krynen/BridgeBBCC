@@ -5,6 +5,8 @@ configDefault = {
 																					 theme에서 제한 가능 												*/
 	badgeVisible			: false,						/* 구독, 비트 등 뱃지를 표시할지
 																					 theme에서 제한 가능												*/
+	themeURI					: "",								/* 불러올 테마 Uri.
+																					 로컬 테마를 이용할 경우 공백으로 둔다.			*/
 	theme							: "default",				// 사용할 테마. theme\테마\*의 파일을 사용
 	themeName					: "",						    /* 테마의 이름
 																					 theme로부터 import 												*/
@@ -310,9 +312,14 @@ if ( (configData.replaceMsgs) && (configData.replaceMsgs.length>0) ) {
 	var loadCss = function() {
 		
 		document.head.appendChild( function() {
+			if (configData.themeURI == "") { configData.themeURI = "./theme/"; }
+			else if (configData.themeURI[configData.themeURI.length-1] != "/") {
+				configData.themeURI += "/";
+			}
+			
 			var ret = document.createElement("link");
 			ret.rel = "stylesheet";
-			ret.href = "theme/" + configData.theme + "/theme.css";
+			ret.href = configData.themeURI + configData.theme + "/theme.css";
 			ret.onload = function() {
 					debugLog(configData.themeName + " 테마를 적용했습니다.");
 					checkComplete();
