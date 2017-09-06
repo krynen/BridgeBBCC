@@ -27,12 +27,12 @@
 * 표기되지 않은 설정 : 건드릴 이유 없음                    *
 *                                                          *
 *                                                          *
-*	numChatMax        한번에 표시될 최대 메세지 수           *
+* numChatMax        한번에 표시될 최대 메세지 수           *
 *                                                          *
-*	★personalColor   이름 색을 트위치와 같게                *
+* ★personalColor   이름 색을 트위치와 같게                *
 *                   true, false                            *
 *                                                          *
-*	★badgeVisible    왕관 등 뱃지를 표시할지                *
+* ★badgeVisible    왕관 등 뱃지를 표시할지                *
 *                   true, false                            *
 *                                                          *
 * ☆themeUri        테마를 불러올 주소                     *
@@ -98,7 +98,7 @@
 * ☆replaceMsgs     특정 텍스트를 변환하기                 *
 *                   [{orig:"이전1", to:"이후1"},           *
 *                    {orig:"이전2", to:"이후2"}]           *
-*									  정규표현식을 알아야 사용할만 함        *
+*                   정규표현식을 알아야 사용할만 함        *
 *                                                          *
 *                   nick:"영어아이디"를 포함하면           *
 *                   특정유저의 메세지만 변환할 수 있음     *
