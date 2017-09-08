@@ -140,14 +140,14 @@ html								{	font-family:'cwtexyen', 'Jeju Gothic', serif;
 .chat_clip_box img
 {
 	/* 사실상 이 속성으로 .chat_clip_box의 높이를 조절 */
-	width:100px;
+	height:56px;
 	/* .chat_clip_box의 나머지 DOM을 오른쪽에 배치시키기 위해 float을 이용 */
 	float:left;
 }
 .chat_clip_title
 {
-	/* 가로세로로 모두 가운데정렬하기 위해 사용 */
-	line-height:100px;
+	/* 가로세로로 모두 가운데정렬하기 위해 사용. .chat_clip_box img의 높이와 맞춰준다 */
+	line-height:56px;
 	text-align:center;
 }
 
