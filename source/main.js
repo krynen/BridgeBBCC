@@ -61,7 +61,6 @@ var replaceMsgFormat = function(message, amount) {
 	return retMessage;
 }
 addChatMessage = function(nick, message, data) {
-console.log(nick, message, data);
 	
 	// DOM Element 생성
 	var chatNicknameBox = document.createElement("div");
@@ -352,13 +351,13 @@ var cheerRegExp = new RegExp( function() {
 	var ret = "[^| ]";
 	for(var index in cheerList) { ret += "(" + cheerList[index] + ")|"; }
 	return ret.slice(0,-1);
-}(), "g");
+}(), "ig");
 
 if (configData.loadCheerImgs) {
 	applyCheerIcon = function(message, data) {
 		if( (!data.cheers) && (data.cheers=="") ) { return message; }
 		
-		var regExp = new RegExp("(" + cheerRegExp.source + ")(\\d+) ", "ig");
+		var regExp = new RegExp("(" + cheerRegExp.source + ")(\\d+)([\\s]|$)", "ig");
 		var matches = message.match(regExp);
 		var newMessage = "";
 		
@@ -368,8 +367,8 @@ if (configData.loadCheerImgs) {
 			newMessage += message.shift();
 			message = message.join(matches[index]);
 			
-			var prefix = matches[index].replace(/\d+ $/, "");
-			var amount = matches[index].split(prefix)[1].replace(" ","");
+			var prefix = matches[index].replace(/\d+(\s|$)/, "");
+			var amount = matches[index].split(prefix)[1].replace(/\s/g,"");
 			prefix = prefix.toLowerCase();
 			newMessage += 
 				'<div class="chat_cheer_text"><img class="cheer_icon" src="./images/cheer/' +
@@ -416,7 +415,7 @@ if (configData.loadTwitchCons) {
 				}
 			}
 			rangeIds.sort( function(a,b) {
-				return (Number(a[0].split("~")[0]) > Number(b[0].split("~")[0])? 1: 0);
+				return (Number(a[0].split("~")[0]) - Number(b[0].split("~")[0]));
 			} );
 			rangeIds.unshift(["-1~-1", ""]);
 
@@ -734,7 +733,7 @@ var client = (function() {
 					}
 					
 					// 클립 링크 파싱
-					var clip = message.match(/(https?:\/\/)?clips\.[a-zA-Z./]*/g);
+					var clip = message.match(/(https?:\/\/)?clips\.[a-zA-Z0-9./]*/g);
 					if (clip!=null) {
 						message = message.replace(clip[0], "");
 						
@@ -755,7 +754,8 @@ var client = (function() {
 													break;
 												case "og:description":
 													title = metas[i].content.split(" - ")[0];
-													uploader = metas[i].content.split(" - ")[1];
+													uploader = metas[i].content.split(" - ")[1].
+														replace("Clipped by ", "");
 												default:
 													break;
 											}
@@ -794,11 +794,11 @@ var client = (function() {
 					// 비트 메세지 파싱
 					if (message.match(cheerRegExp) != null) {
 						var cheers = message.match(
-							new RegExp("(" + cheerRegExp.source + ")\\d+ ", "ig"));
+							new RegExp("(" + cheerRegExp.source + ")\\d+(\\s|$)", "ig"));
 						if (cheers != null) {
 							var cheer = 0;
 							for(var index in cheers) {
-								cheer += Number(cheers[index].replace(cheerRegExp, "").replace(" ",""));
+								cheer += Number(cheers[index].replace(cheerRegExp, ""));
 							}
 							data.cheers = cheer;
 						}

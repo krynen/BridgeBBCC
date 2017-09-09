@@ -21,11 +21,9 @@ body
 	bottom:0;
 }
 
-img.twitch_emote
-{
-	/* 최대(기본) 크기는 112px */
-	max-height:50px;
-}
+/* 최대(기본) 크기는 112px */
+img.twitch_emote	{	max-height:50px; }
+img.dccon					{	max-height:100px; }
 
 
 /* 구독자 및 후원 메세지 설정 */
@@ -93,7 +91,7 @@ html								{	font-family:'cwtexyen', 'Jeju Gothic', serif;
 .chat_badge_box			{ float:right; }
 
 .chat_msg_box							{	white-space:pre-line; word-break:break-word;
-														max-height:100px; }
+														max-height:100px; padding:0 0 5px 0; }
 .chat_msg_box.image_only	{	text-align:center; }
 
 
@@ -130,9 +128,7 @@ html								{	font-family:'cwtexyen', 'Jeju Gothic', serif;
 }
 
 .chat_clip_box
-{
-	white-space:pre-line;
-	
+{	
 	/* .chat_clip_by의 absolute position을 위해 설정 */
 	position:relative;
 }	
@@ -149,6 +145,11 @@ html								{	font-family:'cwtexyen', 'Jeju Gothic', serif;
 	/* 가로세로로 모두 가운데정렬하기 위해 사용. .chat_clip_box img의 높이와 맞춰준다 */
 	line-height:56px;
 	text-align:center;
+	
+	/* 제목이 길 경우를 대비 */
+	white-space:pre;
+	overflow:hidden;
+	text-overflow:ellipsis;
 }
 
 .chat_clip_by
