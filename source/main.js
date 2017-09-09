@@ -299,12 +299,12 @@ debugLog = function(dat) {};
 
 
 /* 특정 메세지 대체 */
-if ( (configData.replaceMsgs) && (configData.replaceMsgs.length>0) ) {
+if ((configData.replaceMsgs) && (configData.replaceMsgs.length>0)) {
 	applyReplace = function(message, data) {
 		for(var index in configData.replaceMsgs) {
 			var msg = configData.replaceMsgs[index];
 			if ( (!msg.nick) || (msg.nick == data.nick) ) {
-				if ( (msg.to=="{no_display}") && (message.match(msg.orig)!=null) ) {
+				if ((msg.to=="{no_display}") && (message.match(msg.orig)!=null)) {
 					data.noDisplay = true;
 					return message;
 				}
@@ -348,38 +348,38 @@ var cheerList = [
 	"4Head", "SwiftRage", "NotLikeThis", "FailFish", "VoHiYo",
 	"PJSalt", "MrDestructoid" ];
 var cheerRegExp = new RegExp( function() {
-	var ret = "[^| ]";
-	for(var index in cheerList) { ret += "(" + cheerList[index] + ")|"; }
-	return ret.slice(0,-1);
+	var ret = "( |^)(";
+	for(var index in cheerList) { ret += cheerList[index] + "|"; }
+	return ret.slice(0,-1) + ")";
 }(), "ig");
 
 if (configData.loadCheerImgs) {
 	applyCheerIcon = function(message, data) {
-		if( (!data.cheers) && (data.cheers=="") ) { return message; }
+		if ((!data.cheers) && (data.cheers=="")) { return message; }
 		
-		var regExp = new RegExp("(" + cheerRegExp.source + ")(\\d+)([\\s]|$)", "ig");
-		var matches = message.match(regExp);
+		var matches = message;
+		var testRegExp = new RegExp(cheerRegExp.source + "(\\d+)(\\s|$)", "i");
 		var newMessage = "";
-		
-		if(matches == null) { return message; }
-		for(var index in matches) {
-			message = message.split(matches[index]);
-			newMessage += message.shift();
-			message = message.join(matches[index]);
+						
+		if (matches.match(testRegExp) == null) { return message; }
+		while ((matches) && (matches.match(testRegExp) != null)) {
 			
-			var prefix = matches[index].replace(/\d+(\s|$)/, "");
-			var amount = matches[index].split(prefix)[1].replace(/\s/g,"");
-			prefix = prefix.toLowerCase();
+			var match = matches.match(testRegExp);
+			
+			newMessage += matches.split(match[0])[0];
+			var remain = matches.split(match[0]);
+			remain.shift();
+			matches = match[1] + match[4] + remain.join(match[0]);
 			newMessage += 
 				'<div class="chat_cheer_text"><img class="cheer_icon" src="./images/cheer/' +
-				prefix +
-				amount.
+				match[2] +
+				match[3].
 					replace(/^[5-9]\d\d\d$/,"%").replace(/^\d/,"!").replace(/\d/g,"0").
 					replace("!", "1").replace("%", "5000")
-				+ '.gif"/>' + amount + "</div> ";
+				+ '.gif"/>' + match[3] + "</div> ";
 		}
 		
-		return newMessage + message;
+		return newMessage + (matches? matches: "");
 	};
 	
 	debugLog("후원 아이콘을 불러왔습니다.");
@@ -793,12 +793,14 @@ var client = (function() {
 					
 					// 비트 메세지 파싱
 					if (message.match(cheerRegExp) != null) {
-						var cheers = message.match(
-							new RegExp("(" + cheerRegExp.source + ")\\d+(\\s|$)", "ig"));
-						if (cheers != null) {
+						var matchTest = message;
+						var testRegExp = new RegExp(cheerRegExp.source + "(\\d+)(\\s|$)", "i");
+						
+						if (matchTest.match(testRegExp) != null) {
 							var cheer = 0;
-							for(var index in cheers) {
-								cheer += Number(cheers[index].replace(cheerRegExp, ""));
+							while (matchTest.match(testRegExp) != null) {
+								cheer += Number(matchTest.match(testRegExp)[0].replace(cheerRegExp, ""));
+								matchTest = matchTest.replace(testRegExp,"$1$4");
 							}
 							data.cheers = cheer;
 						}
