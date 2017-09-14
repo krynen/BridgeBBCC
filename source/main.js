@@ -40,6 +40,10 @@ configDefault = {
 	muteUser					: ["Nightbot"],			/* html에 표시하지 않을 유저 nickname
 																					 display-name과 트위치 id를 모두 사용 가능	*/
 	deleteBanMsg			: true,						// ban된 유저의 메세지를 지우기
+	commands					: [
+		{exe:"clear", msg:"!!clear"},
+		{exe:"theme", msg:"!!theme"}
+	],																		// 활성화시킬 명령어
 	replaceMsgs				: []								// 봇 메세지 등을 대체
 };
 
@@ -47,7 +51,6 @@ configDefault = {
 
 /* 메세지 출력 함수 정의 */
 var numChat = 0;
-/* addChatMessage(nick, message[, data]) */
 var replaceMsgFormat = function(message, amount) {
 	if (typeof amount != "number") { amount = 0; }
 	
@@ -67,13 +70,14 @@ addChatMessage = function(nick, message, data) {
 	chatNicknameBox.classList.add("chat_nickname_box");
 	var chatBadgeBox = document.createElement("div");
 	chatBadgeBox.classList.add("chat_badge_box");
-	var chatInnerBox = document.createElement("div");
-	chatInnerBox.classList.add("chat_inner_box");
+	var chatUpperBox = document.createElement("div");
+	chatUpperBox.classList.add("chat_upper_box");
 	var chatMessageBox = document.createElement("div");
 	chatMessageBox.classList.add("chat_msg_box");
+	var chatLowerBox = document.createElement("div");
+	chatLowerBox.classList.add("chat_lower_box");
 	var chatOuterBox = document.createElement("div");
 	chatOuterBox.classList.add("chat_outer_box");
-	if (data.clip) { chatOuterBox.classList.add("clip_included"); }
 	if (data.nick) { chatOuterBox.classList.add("user_"+data.nick); }
 
 	
@@ -97,24 +101,36 @@ addChatMessage = function(nick, message, data) {
 			data.badges.toString().split(",").forEach( function(element, index, array) {
 				var chatBadge = document.createElement("img");
 
-				if (element.search("broadcaster") == 0) {			// 스트리머(/1)
+				if (element.search("staff") == 0) { 							// 스태프(스패너, 미확인)
+					chatBadge.src = "./images/badge/staff.png";
+				}
+				else if (element.search("globalmod") == 0) {		// 글로벌 모드(도끼, 미확인)
+					chatBadge.src = "./images/badge/gmod.png";
+				}
+				else if (element.search("global-moderator") == 0) { // 글로벌 모더레이터(방패, 미확인)
+					chatBadge.src = "./images/badge/admin.png";
+				}
+				else if (element.search("admin") == 0) { 				// 어드민(방패, 미확인)	
+					chatBadge.src = "./images/badge/admin.png";			// 어느쪽이 맞는지 확인해야함
+				}
+				else if (element.search("broadcaster") == 0) {	// 스트리머(/1)
 					chatBadge.src = "./images/badge/broadcaster.png";
 				}
-				else if (element.search("moderator") == 0) {	// 진은검(/1)
+				else if (element.search("moderator") == 0) {		// 진은검(/1)
 					chatBadge.src = "./images/badge/mod.png";
 				}
-				else if (element.search("partner") == 0) {		// 인증됨(/1)
+				else if (element.search("partner") == 0) {			// 인증됨(/1)
 					chatBadge.src = "./images/badge/verified.png";
 				}
-				else if (element.search("premium") == 0) {		// 프라임(/1)
+				else if (element.search("premium") == 0) {			// 프라임(/1)
 					chatBadge.src = "./images/badge/prime.png";
 				}
-				else if (element.search("turbo") == 0) {			// 터보(/1)
+				else if (element.search("turbo") == 0) {				// 터보(/1)
 					chatBadge.src = "./images/badge/turbo.png";
 				}
 				else {
 					var value = element.replace(/[^1-9]*(\d)/, "$1");
-					if (element.search("subscriber") == 0) {			// 구독자(/0, /3, /6, ...)
+					if (element.search("subscriber") == 0) {				// 구독자(/0, /3, /6, ...)
 						switch (value)
 						{
 						case 0:		// 별
@@ -125,7 +141,7 @@ addChatMessage = function(nick, message, data) {
 							break;
 						}
 					}
-					else if (element.search("bits") == 0) {			// 비트 뱃지(/1, /10, /100, ...)
+					else if (element.search("bits") == 0) {				// 비트 뱃지(/1, /10, /100, ...)
 						var value = element.replace(/[^1-9]*(\d)/, "$1");	
 						chatBadge.src = "./images/badge/bits" + value + ".png";
 					}
@@ -137,19 +153,19 @@ addChatMessage = function(nick, message, data) {
 			chatBadgeBox.classList.add("empty");
 		}
 		if (data.clip) {
-			chatMessageBox.innerHTML = data.clip + chatMessageBox.innerHTML;
+			chatLowerBox.innerHTML = data.clip + chatLowerBox.innerHTML;
 		}
 		if (data.subMonths != undefined) {
-			chatMessageBox.innerHTML =
+			chatLowerBox.innerHTML =
 				'<div class="chat_subscribe_box">' +
 				replaceMsgFormat(configData.subMonthsMsg, data.subMonths) +
-				"</div>" + chatMessageBox.innerHTML;
+				"</div>" + chatLowerBox.innerHTML;
 		}
 		if (data.cheers != undefined) {
-			chatMessageBox.innerHTML = 
+			chatLowerBox.innerHTML = 
 				'<div class="chat_cheer_box">' +
 				replaceMsgFormat(configData.cheersMsg, data.cheers) +
-				"</div>" + chatMessageBox.innerHTML;
+				"</div>" + chatLowerBox.innerHTML;
 		}
 	}
 	if ( chatMessageBox.innerHTML.replace(/(<[^>]*>)|\s/g,"").length == 0) {
@@ -158,12 +174,14 @@ addChatMessage = function(nick, message, data) {
 	
 	
 	// 페이지에 Element 연결
-	chatInnerBox.appendChild(chatNicknameBox);
-	chatInnerBox.appendChild(chatBadgeBox);
-	chatOuterBox.appendChild(chatInnerBox);
-	chatOuterBox.inner = chatInnerBox;
-	chatOuterBox.appendChild(chatMessageBox);
-	chatOuterBox.msg = chatMessageBox;
+	chatUpperBox.appendChild(chatNicknameBox);
+	chatUpperBox.appendChild(chatBadgeBox);
+	chatOuterBox.appendChild(chatUpperBox);
+	chatOuterBox.upper = chatUpperBox;
+	chatOuterBox.appendChild(chatLowerBox);
+	chatOuterBox.lower = chatLowerBox;
+	chatLowerBox.appendChild(chatMessageBox);
+	chatLowerBox.msg = chatMessageBox;
 	document.getElementById("chat_wrapper").appendChild(chatOuterBox);
 	
 	
@@ -193,7 +211,7 @@ var concatChatMessage = function(nick, message, data) {
 	var lChild = document.getElementById("chat_wrapper").lastChild;
 	if (lChild && lChild.getElementsByClassName("chat_nickname_box")[0].innerHTML == nick) {
 		if (typeof applyMessage != "undefined") { message = applyMessage(message, data); }
-		with (lChild.getElementsByClassName("chat_msg_box")[0])	{
+		with (lChild.lower.msg)	{
 			innerHTML += "\n\n" + message;
 			style.maxHeight = "none";
 		}
@@ -206,7 +224,7 @@ var banChatMessage = function(nick) {
 	if (children && children.length > 0) {
 		for (var index in children) {
 			if (isNaN(Number(index))) { continue; }
-			children[index].getElementsByClassName("chat_msg_box")[0].innerHTML = 
+			children[index].lower.msg.innerHTML = 
 				"&lt;message deleted&gt;";
 		}
 	}
@@ -254,8 +272,8 @@ var checkComplete = function() {
 			{ badges:[], escape:false }
 		)
 		if (chat != null) {
-			chat.inner.style.display = "none";
-			chat.msg.style.maxHeight = "none";
+			chat.upper.style.display = "none";
+			chat.lower.msg.style.maxHeight = "none";
 		}
 		checkComplete = function(){};
 	}
@@ -317,28 +335,43 @@ if ((configData.replaceMsgs) && (configData.replaceMsgs.length>0)) {
 }
 
 
-
+testtt = 0;
 /* CSS 로드 */
-{
-	var loadCss = function() {
+var loadCss = function(isRetrying) {
+	// 재 로드를 위해 기존 css를 제거
+	var existings = document.getElementsByClassName("chat_theme");
+	for(var index=0; index<existings.length; ++index) {
+		existings[index].remove();
+	}
+	
+	document.head.appendChild( function() {
+		if (configData.themeURI == "") { configData.themeURI = "./theme/"; }
+		else if (configData.themeURI[configData.themeURI.length-1] != "/") {
+			configData.themeURI += "/";
+		}
 		
-		document.head.appendChild( function() {
-			if (configData.themeURI == "") { configData.themeURI = "./theme/"; }
-			else if (configData.themeURI[configData.themeURI.length-1] != "/") {
-				configData.themeURI += "/";
-			}
-			
-			var ret = document.createElement("link");
-			ret.rel = "stylesheet";
-			ret.href = configData.themeURI + configData.theme + "/theme.css";
-			ret.onload = function() {
-					debugLog(configData.themeName + " 테마를 적용했습니다.");
-					checkComplete();
-			};
-			return ret;
-		}() );
-	}();
-}
+		var ret = document.createElement("link");
+		ret.onload = function() {
+				debugLog(configData.themeName + " 테마를 적용했습니다.");
+				checkComplete();
+		};
+		ret.onerror = function() {
+				debugLog("테마 적용에 실패했습니다.");
+				if (isRetrying != true) {
+					debugLog("기본 설정으로 테마 설정을 재시도합니다.");
+					configData.theme = configDefault.theme;
+					loadCss(true);
+				}
+		};
+		
+		ret.rel = "stylesheet";
+		ret.href = configData.themeURI + configData.theme + "/theme.css";
+		ret.classList.add("chat_theme");
+		
+		return ret;
+	}() );
+};
+loadCss();
 
 
 
@@ -445,6 +478,9 @@ if (configData.loadTwitchCons) {
 						);
 				}
 			}
+			newMessage =
+				newMessage +
+				message.substring(Number(rangeIds[rangeIds.length-1][0].split("~")[1]) + 1);
 			
 			return newMessage;
 		}
@@ -618,6 +654,33 @@ else {
 
 
 
+/* 명령어 정의 */
+var commandExecute = function(exe, arg) {
+	switch (exe) {
+	case "clear" :
+		manageMessage("@ : CLEARCHAT #\n");
+		return true;
+		
+	case "theme" :
+		arg = arg.match(/[a-zA-Z0-9_-]+/)[0];
+		if (arg != null) {
+			configData.theme = arg;
+			loadCss();
+			return true;
+		}
+		else {
+			debugLog("잘못된 테마가 입력되었습니다.");
+			return false;
+		}
+		
+	default:
+		debugLog("잘못된 명령어입니다.");
+		return false;
+	}
+}
+
+
+
 /* IRC 클라이언트 설정 */
 var joinCount = 0;
 defaultColors = [
@@ -625,7 +688,7 @@ defaultColors = [
 	"#9ACD32", "#FF4500", "#2E8B57", "#DAA520", "#D2691E",
 	"#5F9EA0", "#1E90FF", "#FF69B4", "#8A2BE2", "#00FF7F"];
 debugLog("트위치에 접속을 시도합니다.");
-testSocket = function() {};
+manageMessage = function() {}; // 받은 명령어 처리 함수
 var client = (function() {
 	ws = new WebSocket(configData.webSocket);
 	
@@ -730,6 +793,24 @@ var client = (function() {
 						} );
 						
 						if (match != undefined) break;
+					}
+					
+					// 명령어 파싱
+					if (configData.commands.length > 0) {
+						if (data.badges.toString().search("broadcaster") != -1) {
+							var isBreak = false;
+							for(var index in configData.commands) {
+								var cmd = configData.commands[index];
+								if (message.search(cmd.msg) == 0) {
+									var cmdText = cmd.exe;
+									var cmdArgument = message.split(cmd.msg)[1];
+									
+									isBreak = isBreak || commandExecute(cmdText, cmdArgument);
+								}
+							}
+							
+							if (isBreak) break;
+						}
 					}
 					
 					// 클립 링크 파싱
@@ -854,7 +935,7 @@ var client = (function() {
 		} );
 	}
 	ws.onmessage = onmessageEventHandler;
-	testSocket = function(string) {
+	manageMessage = function(string) {
 		var evt = {};
 		evt.data = string;
 		onmessageEventHandler(evt);

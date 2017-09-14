@@ -46,9 +46,9 @@ img.dccon					{	max-height:100px; }
 	</div>	
 */
 @keyframes SubsAni { 50%	{ color:red; } }
-.chat_msg_box .chat_subscribe_box,
-.chat_msg_box .chat_cheer_box			{	text-align:center; 
-																		animation:SubsAni 6 1s ease; }
+.chat_subscribe_box,
+.chat_cheer_box			{	text-align:center; 
+											animation:SubsAni 6 1s ease; }
 /* 후원 금액 */
 .chat_cheer_text									{ color:red; display:inline-block; }
 /* 후원 아이콘 */
@@ -84,11 +84,14 @@ html								{	font-family:'cwtexyen', 'Jeju Gothic', serif;
 
 .chat_outer_box			{	position:relative; z-index:0; overflow:hidden;
 											margin-top:8px; border:1px solid grey; padding:4px; }
-.chat_inner_box			{	margin-bottom:3px; }
+.chat_inner_box,	/* SOON DEPRECATED */
+.chat_upper_box			{	margin-bottom:3px; }
 											
 .chat_nickname_box,
 .chat_badge_box 		{	display:inline-block; }
 .chat_badge_box			{ float:right; }
+.chat_outer_box .chat_msg_box,
+.chat_lower_box			{ clear:right; }
 
 .chat_msg_box							{	white-space:pre-line; word-break:break-word;
 														max-height:100px; padding:0 0 5px 0; }
@@ -120,8 +123,22 @@ html								{	font-family:'cwtexyen', 'Jeju Gothic', serif;
 				(configData.clipReplaceMsg)
 			</div>
 			...
+	0.3.0 버전과 그 이후
+	<div class="chat_outer_box clip_included">
+		<div class="chat_upper_box">
+			...
+		</div>
+		<div class="chat_lower_box">
+			<div class="chat_clip_box">
+				<img src...>
+				<div class="chat_clip_title">...</div>
+				<div class="chat_clip_by">...</div>
+			</div>
+			<div class="chat_msg_box">
+			</div>
+			...
 */
-.clip_included .chat_msg_box
+.clip_included .chat_msg_box /* SOON DEPRECATED */
 {
 	/* 클립과 일반 텍스트를 같이 보냈을 경우를 위해 높이를 높여준다 */
 	max-height:160px;
