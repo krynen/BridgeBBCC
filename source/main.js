@@ -104,14 +104,11 @@ addChatMessage = function(nick, message, data) {
 				if (element.search("staff") == 0) { 							// 스태프(스패너, 미확인)
 					chatBadge.src = "./images/badge/staff.png";
 				}
-				else if (element.search("globalmod") == 0) {		// 글로벌 모드(도끼, 미확인)
+				else if (element.search("global_mod") == 0) {		// 글로벌 모드(도끼, 미확인)
 					chatBadge.src = "./images/badge/gmod.png";
 				}
-				else if (element.search("global-moderator") == 0) { // 글로벌 모더레이터(방패, 미확인)
-					chatBadge.src = "./images/badge/admin.png";
-				}
 				else if (element.search("admin") == 0) { 				// 어드민(방패, 미확인)	
-					chatBadge.src = "./images/badge/admin.png";			// 어느쪽이 맞는지 확인해야함
+					chatBadge.src = "./images/badge/admin.png";
 				}
 				else if (element.search("broadcaster") == 0) {	// 스트리머(/1)
 					chatBadge.src = "./images/badge/broadcaster.png";
@@ -122,11 +119,29 @@ addChatMessage = function(nick, message, data) {
 				else if (element.search("partner") == 0) {			// 인증됨(/1)
 					chatBadge.src = "./images/badge/verified.png";
 				}
+				else if (element.search("vip") == 0) {				// VIP(/1)
+					chatBadge.src = "./images/badge/vip.png";
+				}
 				else if (element.search("premium") == 0) {			// 프라임(/1)
 					chatBadge.src = "./images/badge/prime.png";
 				}
 				else if (element.search("turbo") == 0) {				// 터보(/1)
 					chatBadge.src = "./images/badge/turbo.png";
+				}
+				else if (element.search("clip-champ") == 0) {				// Power Clipper(/1)
+					chatBadge.src = "./images/badge/clip-champ.png";
+				}
+				else if (element.search("bits-leader") == 0) {			//비트 리더
+					var value = element.replace(/[^1-9]*(\d)/, "$1");
+					chatBadge.src = "./images/badge/bitsleader" + value + ".png";
+				}
+				else if (element.search("bits-charity") == 0) {				//2018~ 후원자 뱃지
+					var value = element.replace(/[^1-9]*(\d)/, "$1");
+					chatBadge.src = "./images/badge/charity" + value + ".png";
+				}
+				else if (element.search("bits") == 0) {				// 비트 뱃지(/1, /10, /100, ...)
+					var value = element.replace(/[^1-9]*(\d)/, "$1");	
+					chatBadge.src = "./images/badge/bits" + value + ".png";
 				}
 				else {
 					var value = element.replace(/[^1-9]*(\d)/, "$1");
