@@ -143,6 +143,9 @@ addChatMessage = function(nick, message, data) {
 					var value = element.replace(/[^1-9]*(\d)/, "$1");	
 					chatBadge.src = "./images/badge/bits" + value + ".png";
 				}
+				else if (element.search("anonymous-cheerer") == 0) {		//익명 비트 후원(/1)
+					chatBadge.src = "./images/badge/anonymous-cheerer.png"
+				}
 				else {
 					var value = element.replace(/[^1-9]*(\d)/, "$1");
 					if (element.search("subscriber") == 0) {				// 구독자(/0, /3, /6, ...)
