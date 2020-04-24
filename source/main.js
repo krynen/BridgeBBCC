@@ -45,7 +45,8 @@ configDefault = {
     {exe:"theme", msg:"!!theme"},
     {exe:"load", msg:"!!load"}
   ],                                    // 활성화시킬 명령어
-  replaceMsgs       : []                // 봇 메세지 등을 대체
+  replaceMsgs       : [],               // 봇 메세지 등을 대체
+  scale             : 1                 // 화면의 확대/축소 배율 조정
 };
 
 
@@ -848,3 +849,11 @@ var client = (function() {
         configData.retryInterval * 1000 );
   }
 }) ();
+
+// 확대/축소
+document.body.setAttribute(
+  "style",
+  "width: " + (100 / configData.scale) + "%;" +
+  "transform-origin: left bottom;" +
+  "transform: scale(" + configData.scale + ");"
+);
