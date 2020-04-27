@@ -1,4 +1,4 @@
-﻿/* 기본 설정 */
+/* 기본 설정 */
 configDefault = {
   numChatMax        : 20,               // html에 한꺼번에 표시될 수 있는 메세지의 최대 갯수
   personalColor     : false,            /* 이름 색깔을 트위치 이름색과 일치시킬지
@@ -45,7 +45,11 @@ configDefault = {
     {exe:"theme", msg:"!!theme"},
     {exe:"load", msg:"!!load"}
   ],                                    // 활성화시킬 명령어
-  replaceMsgs       : []                // 봇 메세지 등을 대체
+  replaceMsgs       : []                /* 봇 메세지 등을 대체
+                                           {
+                                             orig: 원문(문자열 또는 정규표현식),
+                                             to: 대체할 문자열("{no_display}"로 미표시)
+                                            }                                         */
 };
 
 
@@ -215,9 +219,10 @@ var applyMessage = function(message, data) {
 
   // HTML 이스케이핑
   if ((data.escape == undefined) || (data.escape == true)) {
-    message = message.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    message = message.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   }
 
+  message = applyReplace(message, data);
   message = applyTwitchCon(message, data);
   message = applyCheerIcon(message, data);
   message = applyDcCon(message, data);
@@ -298,7 +303,7 @@ debugLog = function(dat) {};
 
 
 
-/* 특정 메세지 대체 */
+/* 지정 메세지 대체 */
 if ((configData.replaceMsgs) && (configData.replaceMsgs.length>0)) {
   applyReplace = function(message, data) {
     for(var index in configData.replaceMsgs) {
@@ -617,7 +622,7 @@ defaultColors = [
   "#5F9EA0", "#1E90FF", "#FF69B4", "#8A2BE2", "#00FF7F"];
 debugLog("트위치에 접속을 시도합니다.");
 manageMessage = function() {}; // 받은 명령어 처리 함수
-var client = (function() {
+var client = function() {
   ws = new WebSocket(configData.webSocket);
 
   ws.onopen = function() {
@@ -847,4 +852,5 @@ var client = (function() {
         function() { client(); },
         configData.retryInterval * 1000 );
   }
-}) ();
+};
+client();
