@@ -45,11 +45,12 @@ configDefault = {
     {exe:"theme", msg:"!!theme"},
     {exe:"load", msg:"!!load"}
   ],                                    // 활성화시킬 명령어
-  replaceMsgs       : []                /* 봇 메세지 등을 대체
+  replaceMsgs       : [],               /* 봇 메세지 등을 대체
                                            {
                                              orig: 원문(문자열 또는 정규표현식),
                                              to: 대체할 문자열("{no_display}"로 미표시)
                                             }                                         */
+  scale             : 1                 // 화면의 확대/축소 배율 조정
 };
 
 
@@ -978,3 +979,11 @@ var client = function() {
   }
 };
 client();
+
+// 확대/축소
+document.body.setAttribute(
+  "style",
+  "width: " + (100 / configData.scale) + "%;" +
+  "transform-origin: left bottom;" +
+  "transform: scale(" + configData.scale + ");"
+);
