@@ -305,12 +305,17 @@ if (window.location.href.indexOf("?") != -1) {
       var key = value.shift();
       value = value[0];
 
-      if ((value!=undefined) && configDefault.hasOwnProperty(key)) {
-        switch (key) {
-          case "scale":
-            if (!isNaN(scale)) { window.localStorage.setItem("scale", value); }
-            return;
+      if (value == undefined) {
+        return;
+      }
 
+      if (key == "scale" && !isNaN(value)) {
+        window.localStorage.setItem("scale", value);
+        return;
+      }
+
+      if (configDefault.hasOwnProperty(key)) {
+        switch (key) {
           case "channel":
             configData.channel = value.split(",").map( function(channel) {
               return "#" + channel;
