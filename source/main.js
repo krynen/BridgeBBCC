@@ -178,7 +178,10 @@ addChatMessage = function(nick, message, data) {
 
         var targets = Object.keys(badgeList||{})
           .filter( function(name) { return (name.indexOf(badgeName + "/") == 0); } )
-          .filter( function(name) { return Number(name.split("/")[1]) <= badgeTier; } )
+          .filter( function(name) {
+            if (!isNaN(badgeTier)) { return Number(name.split("/")[1]) <= badgeTier; }
+            return (name.indexOf(badgeTier) == badgeName.length+1);
+          } )
           .sort( function(right, left) {
             return Number(left.split("/")[1]) - Number(right.split("/")[1]);
           } );
@@ -186,6 +189,8 @@ addChatMessage = function(nick, message, data) {
         if (targets.length > 0) {
           var chatBadge = document.createElement("img");
           chatBadge.src = badgeList[targets[0]];
+          chatBadge.classList.add("badge_" + badgeName);
+          chatBadge.classList.add("badge_" + badge);
           chatBadgeBox.appendChild(chatBadge);
         }
       } );

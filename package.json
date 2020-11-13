@@ -8,7 +8,11 @@
 		"IRC"
 	],
 	"bugs": {
-		"url": "https://github.com/krynen/BridgeBBCC"
+		"url": "https://github.com/krynen/BridgeBBCC/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/krynen/BridgeBBCC.git"
 	},
 	"license": "MIT",
 	"author": "Mr_WaterT",
