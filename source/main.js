@@ -931,7 +931,7 @@ var client = function() {
           }
 
           // 링크 파싱
-          var linkRegExp = /^(https?:\/\/)?([A-Za-z0-9#%\-_=+]+\.)+[A-Za-z]{2,}(\/[^\s]*)?$/;
+          var linkRegExp = /^(https?:\/\/)?([A-Za-z0-9#%\-_=+]+\.)+[a-z]{2,}(\/[0-9A-Za-z#%&()+/\-\.:=?@_~]*)?/;
           message.split(/\s/).forEach( function(phrase) {
             if (phrase.match(linkRegExp)) {
               if (
