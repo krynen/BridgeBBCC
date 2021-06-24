@@ -1,6 +1,6 @@
 {
 	"name": "BridgeBBCC",
-	"version": "0.5.4",
+	"version": "0.5.5",
 	"description": "Bridge Between BroadCasting and twitch Chat",
 	"keywords": [
 		"twitch",

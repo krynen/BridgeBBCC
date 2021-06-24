@@ -18,6 +18,7 @@ configDefault = {
   useDisplayName    : true,             // 한글 닉네임으로 이름을 표시할지
   loadCheerImgs     : true,             // 비트 후원채팅을 이미지로 표시할지
   loadTwitchCons    : true,             // 트위치 이모티콘과 구독콘을 불러올지
+  loadTwitchv2      : true,             // 움직이는 트위치 이모티콘을 불러올지
   loadDcCons        : true,             // 디씨콘을 불러올지
   dcConsURI         : "",               /* 불러올 디씨콘 Uri.
                                            로컬 디씨콘을 이용할 경우 공백으로 둔다.   */
@@ -518,7 +519,10 @@ var badgeList = {};
 if (configData.badgeVisible) {
   var globalBadgeRequest = new window.XMLHttpRequest();
   globalBadgeRequest.open(
-    "GET", "https://badges.twitch.tv/v1/badges/global/display", true);
+    "GET",
+    "https://badges.twitch.tv/v1/badges/global/display",
+    true
+  );
 
   var handler = function(response) {
     var data = JSON.parse(response)["badge_sets"];
@@ -653,7 +657,11 @@ if (configData.loadTwitchCons) {
           ")(\\s|$)"
         );
         var emoteElement =
-          '<img class="twitch_emote" src="' + twitchConsUrlTemplate + emotes[emote] + '/default/light/3.0" />';
+          '<img class="twitch_emote" src="' +
+          twitchConsUrlTemplate +
+          emotes[emote] +
+          (configData.loadTwitchv2? "/default": "/static") +
+          '/dark/3.0" />';
 
         while (message.match(emoteRegExp)) {
           message = message.replace(emoteRegExp, "$1" + emoteElement + "$3");
