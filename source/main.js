@@ -627,7 +627,7 @@ else {
 
 /* 디씨콘 및 구독콘 로드 및 적용 */
 if (configData.loadTwitchCons) {
-  var twitchConsUrlTemplate = "https://static-cdn.jtvnw.net/emoticons/v1/";
+  var twitchConsUrlTemplate = "https://static-cdn.jtvnw.net/emoticons/v2/";
 
   applyTwitchCon = function(message, data) {
     if ( !(data && data.emotes) || (data.emotes.length==0) ) { return message; }
@@ -653,7 +653,7 @@ if (configData.loadTwitchCons) {
           ")(\\s|$)"
         );
         var emoteElement =
-          '<img class="twitch_emote" src="' + twitchConsUrlTemplate + emotes[emote] + '/3.0" />';
+          '<img class="twitch_emote" src="' + twitchConsUrlTemplate + emotes[emote] + '/default/light/3.0" />';
 
         while (message.match(emoteRegExp)) {
           message = message.replace(emoteRegExp, "$1" + emoteElement + "$3");
