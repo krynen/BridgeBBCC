@@ -520,7 +520,7 @@ if (configData.badgeVisible) {
   var globalBadgeRequest = new window.XMLHttpRequest();
   globalBadgeRequest.open(
     "GET",
-    "https://badges.twitch.tv/v1/badges/global/display",
+    "https://chat.dhfhfk.com/helix/chat/badges/channels/",
     true
   );
 
@@ -541,7 +541,7 @@ if (configData.badgeVisible) {
         handler(globalBadgeRequest.responseText);
 
         if (configData.badgeChannelId && Number(configData.badgeChannelId)>0) {
-          var channelBadgeUrl = "https://badges.twitch.tv/v1/badges/channels/";
+          var channelBadgeUrl = "https://chat.dhfhfk.com/helix/chat/badges/channels/";
           channelBadgeUrl += configData.badgeChannelId + "/display";
 
           var channelBadgeRequest = new window.XMLHttpRequest();
