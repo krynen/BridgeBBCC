@@ -518,9 +518,15 @@ loadCss();
 var badgeList = {};
 if (configData.badgeVisible) {
   var globalBadgeRequest = new window.XMLHttpRequest();
+  /*
+  * https://discuss.dev.twitch.tv/t/legacy-badges-endpoint-shutdown-details-and-timeline-june-2023/44621
+  * 기존 트위치 배지를 받아오는 endpoint가 제거되어 배지를 불러오지 못함.
+  * 이를 해결하기 위해 현재 제공되는 API를 프록싱하여 제공하는 사설 서버 URL로 설정함.
+  * 2023. 07. 08 dhfhfk
+  */
   globalBadgeRequest.open(
     "GET",
-    "https://badges.twitch.tv/v1/badges/global/display",
+    "https://chat.dhfhfk.com/helix/chat/badges/global/display",
     true
   );
 
@@ -541,7 +547,7 @@ if (configData.badgeVisible) {
         handler(globalBadgeRequest.responseText);
 
         if (configData.badgeChannelId && Number(configData.badgeChannelId)>0) {
-          var channelBadgeUrl = "https://badges.twitch.tv/v1/badges/channels/";
+          var channelBadgeUrl = "https://chat.dhfhfk.com/helix/chat/badges/channels/";
           channelBadgeUrl += configData.badgeChannelId + "/display";
 
           var channelBadgeRequest = new window.XMLHttpRequest();
